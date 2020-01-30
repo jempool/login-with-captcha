@@ -3,8 +3,6 @@ import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
@@ -14,6 +12,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";
+import ReCAPTCHA from "react-google-recaptcha";
 
 function Copyright() {
   return (
@@ -28,7 +27,7 @@ function Copyright() {
   );
 }
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(theme => ({ 
   paper: {
     marginTop: theme.spacing(8),
     display: "flex",
@@ -52,6 +51,7 @@ export default function SignIn() {
   const classes = useStyles();
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
+  const [disabledLogin, setdisabledLogin] = useState(true);
   const [open, setOpen] = React.useState(false);
 
   const handleClose = (event, reason) => {
@@ -68,6 +68,11 @@ export default function SignIn() {
       setUser("");
       setPassword("");
     }
+  }
+
+  function CaptchaPassed() {
+    console.log("Captcha passed!");
+    setdisabledLogin(false);
   }
 
   return (
@@ -107,11 +112,15 @@ export default function SignIn() {
             id="password"
             autoComplete="current-password"
           />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
+          <br />
+          <br />
+          <ReCAPTCHA
+            align="center"
+            sitekey="6LcTTdQUAAAAAO4tccHs-veRpt1qFHe8vvKaNpZS"
+            onChange={CaptchaPassed}
           />
           <Button
+            disabled={disabledLogin}
             type="submit"
             fullWidth
             variant="contained"
